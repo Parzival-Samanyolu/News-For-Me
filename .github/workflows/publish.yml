@@ -1,0 +1,86 @@
+name: AI News Publisher
+
+on:
+  # ── 3x daily schedule (adjust times to Turkish peak hours) ──────────────
+  # 07:00 Turkey time = 04:00 UTC  → morning commute readers
+  # 13:00 Turkey time = 10:00 UTC  → lunch break readers
+  # 20:00 Turkey time = 17:00 UTC  → evening readers
+  schedule:
+    - cron: "0 4 * * *"   # 07:00 Turkey (UTC+3)
+    - cron: "0 10 * * *"  # 13:00 Turkey
+    - cron: "0 17 * * *"  # 20:00 Turkey
+
+  # Manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      articles_count:
+        description: "Number of articles to publish (default: 1)"
+        required: false
+        default: "1"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # ── 1. Checkout repository ───────────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── 2. Restore published hashes cache (avoids republishing) ──────────
+      - name: Restore published hashes cache
+        uses: actions/cache@v4
+        with:
+          path: published_hashes.json
+          key: published-hashes-${{ github.run_id }}
+          restore-keys: |
+            published-hashes-
+
+      # ── 3. Set up Python ─────────────────────────────────────────────────
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      # ── 4. Install dependencies ──────────────────────────────────────────
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install \
+            feedparser \
+            requests \
+            "google-genai>=1.0.0" \
+            python-dateutil
+
+      # ── 5. Run the pipeline ──────────────────────────────────────────────
+      - name: Run AI News Pipeline
+        env:
+          GEMINI_API_KEY:   ${{ secrets.GEMINI_API_KEY }}
+          WP_URL:           ${{ secrets.WP_URL }}
+          WP_USER:          ${{ secrets.WP_USER }}
+          WP_APP_PASSWORD:  ${{ secrets.WP_APP_PASSWORD }}
+          PEXELS_API_KEY:   ${{ secrets.PEXELS_API_KEY }}
+          GNEWS_API_KEY:    ${{ secrets.GNEWS_API_KEY }}
+          ARTICLES_PER_RUN: ${{ github.event.inputs.articles_count || '1' }}
+        run: python main.py
+
+      # ── 6. Save run log as artifact (viewable in Actions UI) ─────────────
+      - name: Upload run log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: run-log-${{ github.run_number }}
+          path: run_log.json
+          retention-days: 30
+
+      # ── 7. Commit updated published_hashes.json back to repo ─────────────
+      - name: Commit published hashes
+        if: success()
+        run: |
+          git config user.name  "AI News Bot"
+          git config user.email "bot@noreply.github.com"
+          git add published_hashes.json run_log.json || true
+          git diff --cached --quiet || git commit -m "chore: update published hashes [skip ci]"
+          git push || true

@@ -1,0 +1,22 @@
+# Secrets & local config
+.env
+
+# Runtime output files
+run_log.json
+published_hashes.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# OS
+.DS_Store
+Thumbs.db
