@@ -117,8 +117,8 @@ def generate_article(topic: dict, client: genai.Client, retries: int = 3) -> dic
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     temperature=0.85,       # creative but not hallucinating
-                    max_output_tokens=2048,
-                    response_mime_type="text/plain",
+                    max_output_tokens=8192,
+                    response_mime_type="application/json",
                 ),
             )
             raw = response.text.strip()
