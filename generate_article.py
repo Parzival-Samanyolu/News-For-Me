@@ -48,6 +48,7 @@ Aşağıdakilerden herhangi birini içeren konuları kesinlikle haberleştirme v
 Eğer kaynak konu Türk iç siyasetiyle ilgiliyse, şu JSON'u döndür ve DUR:
 {{"error": "turkish_domestic_politics", "title": "", "content_html": ""}}
 ✅ İZİN VERİLENLER: Yazman gereken haberler; Teknoloji, oyunlar, spor, startup habeleri, Uluslararası haberler, Türkiye'nin dış politikası, ekonomisi, turizmi ve diğer global gelişmeler tamamen serbesttir.
+Her Zaman Startup ve teknoloji odaklı haberlere öncelik ver
 ---
 YAZIM KURALLARI:
 1. BAŞLIK (3 seçenek üret, en iyisini seç):
