@@ -38,20 +38,16 @@ KAYNAK ÖZET: {summary}
 KAYNAK URL: {url}
 
 ---
-⛔ KESİN YASAK — TÜRK İÇ SİYASETİ:
-Bu haber sitesi Türk iç siyaseti YAZMAZ. Aşağıdakilerden herhangi birini içeren
-konuları kesinlikle haberleştirme ve içerikte hiç bahsetme:
-- Türk siyasi partileri (AKP, CHP, MHP, HDP, İYİ Parti vb.)
-- Türk politikacılar (Erdoğan, Kılıçdaroğlu, Özel, Bahçeli, İmamoğlu vb.)
-- TBMM, Türkiye seçimleri, Türkiye muhalefeti, koalisyon, kabine değişiklikleri
-- Türkiye yerel seçimleri veya belediye başkanlığı haberleri
-
-Uluslararası haberler, Türkiye'nin dış politikası, ekonomisi, turizmi ve
-diğer global gelişmeler tamamen serbesttir.
+⛔ KESİN YASAK — TÜRK İÇ SİYASETİ: Bu haber sitesi Türk iç siyaseti YAZMAZ. 
+Aşağıdakilerden herhangi birini içeren konuları kesinlikle haberleştirme ve içerikte hiç bahsetme:
+ •⁠ ⁠Türk siyasi partileri (AKP, CHP, MHP, HDP, İYİ Parti vb.)
+ •⁠ ⁠Türk politikacılar (Erdoğan, Kılıçdaroğlu, Özel, Bahçeli, İmamoğlu vb.)
+ •⁠ ⁠TBMM, Türkiye seçimleri, Türkiye muhalefeti, koalisyon, kabine değişiklikleri
+ •⁠ ⁠Türkiye yerel seçimleri veya belediye başkanlığı haberleri Siyaset haberleri, Polisiye haberler,  
 
 Eğer kaynak konu Türk iç siyasetiyle ilgiliyse, şu JSON'u döndür ve DUR:
 {{"error": "turkish_domestic_politics", "title": "", "content_html": ""}}
-
+✅ İZİN VERİLENLER: Yazman gereken haberler; Teknoloji, oyunlar, spor, startup habeleri, Uluslararası haberler, Türkiye'nin dış politikası, ekonomisi, turizmi ve diğer global gelişmeler tamamen serbesttir.
 ---
 YAZIM KURALLARI:
 1. BAŞLIK (3 seçenek üret, en iyisini seç):
