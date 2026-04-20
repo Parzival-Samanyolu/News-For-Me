@@ -88,7 +88,6 @@ YAZIM KURALLARI:
    - SEO uyumlu olmalı
    - Güçlü, doğal ve merak uyandırıcı olmalı
    - Ana anahtar kelime başa yakın kullanılmalı
-   - Abartılı clickbait olmasın
 
 2. GİRİŞ PARAGRAFI (2-3 cümle):
    - Okuyucuyu hemen içine çeken doğal bir giriş yap
