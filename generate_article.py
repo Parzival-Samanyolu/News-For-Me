@@ -53,11 +53,11 @@ Aşağıdaki konuların herhangi biri varsa içerik üretme:
 
 Eğer kaynak bu konularla ilgiliyse şu JSON'u döndür ve DUR:
 
-{
+{{
   "error": "turkish_domestic_politics",
   "title": "",
   "content_html": ""
-}
+}}
 
 ✅ İZİN VERİLENLER:
 • Startup haberleri
@@ -172,7 +172,7 @@ Anahtar kelime spam yapma.
 ÇIKTI FORMATI
 (Kesinlikle sadece JSON döndür, başka hiçbir şey yazma)
 
-{(
+{{
   "title": "Seçilen en iyi başlık",
   "title_alternatives": [
     "Alternatif başlık 1",
@@ -186,7 +186,8 @@ Anahtar kelime spam yapma.
   "category": "Startup",
   "tags": ["etiket1", "etiket2", "etiket3", "etiket4", "etiket5"],
   "image_search_query": "startup funding office"
-)}
+}}
+
 """
     return prompt
 
