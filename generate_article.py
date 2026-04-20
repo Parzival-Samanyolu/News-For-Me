@@ -38,64 +38,156 @@ KAYNAK ÖZET: {summary}
 KAYNAK URL: {url}
 
 ---
-⛔ KESİN YASAK — TÜRK İÇ SİYASETİ: Bu haber sitesi Türk iç siyaseti YAZMAZ. 
-Aşağıdakilerden herhangi birini içeren konuları kesinlikle haberleştirme ve içerikte hiç bahsetme:
- •⁠ ⁠Türk siyasi partileri (AKP, CHP, MHP, HDP, İYİ Parti vb.)
- •⁠ ⁠Türk politikacılar (Erdoğan, Kılıçdaroğlu, Özel, Bahçeli, İmamoğlu vb.)
- •⁠ ⁠TBMM, Türkiye seçimleri, Türkiye muhalefeti, koalisyon, kabine değişiklikleri
- •⁠ ⁠Türkiye yerel seçimleri veya belediye başkanlığı haberleri Siyaset haberleri, Polisiye haberler,  
+⛔ KESİN YASAK — TÜRK İÇ SİYASETİ / POLİSİYE
 
-Eğer kaynak konu Türk iç siyasetiyle ilgiliyse, şu JSON'u döndür ve DUR:
-{{"error": "turkish_domestic_politics", "title": "", "content_html": ""}}
-✅ İZİN VERİLENLER: Yazman gereken haberler; Teknoloji, oyunlar, spor, startup habeleri, Uluslararası haberler, Türkiye'nin dış politikası, ekonomisi, turizmi ve diğer global gelişmeler tamamen serbesttir.
-Her Zaman Startup ve teknoloji odaklı haberlere öncelik ver
+Bu haber sistemi Türk iç siyaseti veya polisiye içerik YAZMAZ.
+
+Aşağıdaki konuların herhangi biri varsa içerik üretme:
+
+• Türk siyasi partileri (AKP, CHP, MHP, HDP, DEM Parti, İYİ Parti vb.)
+• Türk politikacılar (Erdoğan, Kılıçdaroğlu, Özgür Özel, Bahçeli, İmamoğlu vb.)
+• Eski siyasetçiler, eski milletvekilleri, eski belediye başkanları, eski bakanlar
+• TBMM, seçimler, yerel seçimler, kabine değişiklikleri, muhalefet, koalisyon
+• Belediye başkanlığı haberleri
+• Cinayet, gözaltı, tutuklama, dolandırıcılık, operasyon, mahkeme, soruşturma gibi polisiye haberler
+
+Eğer kaynak bu konularla ilgiliyse şu JSON'u döndür ve DUR:
+
+{
+  "error": "turkish_domestic_politics",
+  "title": "",
+  "content_html": ""
+}
+
+✅ İZİN VERİLENLER:
+• Startup haberleri
+• Teknoloji haberleri
+• Yapay zeka haberleri
+• Oyun haberleri
+• Borsa / finans haberleri
+• Uluslararası haberler
+• Türkiye ekonomisi
+• Turizm
+• Türkiye dış politikası
+
+ÖNCELİK SIRASI:
+1. Startup
+2. Teknoloji
+3. Yapay Zeka
+4. Oyun
+5. Borsa / Finans
+6. Uluslararası
+
+Üst sıradaki kategori varsa alt kategoriye geçme.
+
 ---
 YAZIM KURALLARI:
+
 1. BAŞLIK (3 seçenek üret, en iyisini seç):
-   - Merak uyandırıcı, soru işareti veya ünlem içermeli
    - 8-12 kelime arası olmalı
-   - Sayılar, güçlü sıfatlar, "İşte", "Ortaya Çıktı", "Şok Eden", "Tarihi" gibi güçlü ifadeler kullan
-   - SEO dostu: Ana anahtar kelimeyi başa koy
+   - SEO uyumlu olmalı
+   - Güçlü, doğal ve merak uyandırıcı olmalı
+   - Ana anahtar kelime başa yakın kullanılmalı
+   - Abartılı clickbait olmasın
 
 2. GİRİŞ PARAGRAFI (2-3 cümle):
-   - Okuyucuyu hemen çekecek çarpıcı bir açılış
-   - Neden önemli olduğunu hemen anlat
-   - Merak yaratacak bir cümleyle bitir
+   - Okuyucuyu hemen içine çeken doğal bir giriş yap
+   - Haberin neden önemli olduğunu açıkla
+   - Yüzeysel giriş yapma
 
 3. ANA İÇERİK (4-5 paragraf, her biri 80-120 kelime):
-   - Her paragrafa güçlü bir alt başlık koy (H2 formatında)
+   - Her paragrafa H2 alt başlık koy
    - Konuyu derinlemesine açıkla
-   - İstatistikler, alıntılar veya gerçekler ekle (gerçekçi ve mantıklı olmalı)
-   - Okuyucuyu meşgul edecek aktif bir ses tonu kullan
-   - Türkiye bağlantısı kur (mümkünse)
+   - Somut bilgiler ver
+   - Şirket, kişi, ürün ve rakam detaylarını ekle
+   - Sektörel etkisini anlat
+   - Genel geçer cümleler kullanma
 
 4. SONUÇ:
-   - Gelecekteki gelişmelere işaret et
-   - Okuyucuya ne yapması gerektiğini söyle veya soru sor
-
-5. SEO META VERİLERİ:
-   - Meta açıklama (150-160 karakter)
-   - Anahtar kelimeler (5-8 adet, virgülle ayrılmış)
-   - Odak anahtar kelime (1 adet)
-   - Kategori (Teknoloji/Dünya/Ekonomi/Spor/Sağlık/Bilim/Gündem'den biri)
-   - Etiketler (5-7 etiket, virgülle ayrılmış)
+   - Gelişmenin gelecekteki etkisini özetle
+   - Güçlü ama doğal bir kapanış yap
 
 ---
-ÇIKTI FORMATI (kesinlikle bu JSON formatında döndür, başka hiçbir şey yazma):
+DETAY ZORUNLULUĞU:
 
-{{
+Yüzeysel yazmak YASAK.
+
+Kötü örnek:
+"Bir startup yatırım aldı."
+
+İyi örnek:
+"Berlin merkezli yapay zeka girişimi X, Y Ventures liderliğinde 15 milyon dolar yatırım alarak Avrupa pazarındaki büyümesini hızlandıracağını açıkladı."
+
+Mutlaka ekle:
+• kişi adları
+• şirket adları
+• marka adları
+• ürün adları
+• yatırım miktarı
+• yatırımcı adı
+• ülke / şehir bilgisi
+• sektör etkisi
+
+Şirket adı vermeden haber yazma.
+Genel ifadeler kullanma.
+
+---
+HUMANIZED WRITING ZORUNLULUĞU:
+
+İçerik robot gibi görünmemeli.
+
+Kurallar:
+• İnsan editör diliyle yaz
+• Doğal cümle akışı kullan
+• Cümle uzunluklarını çeşitlendir
+• Aynı kalıpları tekrar etme
+• Yapay ve mekanik ifadeler kullanma
+• Klişe haber cümlelerini azalt
+
+YASAK KALIPLAR:
+• "dikkat çekiyor"
+• "öne çıkıyor"
+• "önemli bir gelişme olarak değerlendiriliyor"
+• "sektörde ses getirdi"
+
+Bu tür tekrar eden kalıplar yerine doğal yaz.
+
+Amaç:
+Okuyucu içeriğin yapay zeka tarafından değil editör tarafından yazıldığını hissetsin.
+
+---
+SEO META VERİLERİ:
+
+• Meta açıklama: 150-160 karakter
+• Anahtar kelimeler: 5-8 adet
+• Odak anahtar kelime: 1 adet
+• Kategori: Startup / Teknoloji / Finans / Dünya / Oyun
+• Etiketler: 5-7 adet
+• image_search_query: İngilizce 2-4 kelime
+
+SEO doğal olmalı.
+Anahtar kelime spam yapma.
+
+---
+ÇIKTI FORMATI
+(Kesinlikle sadece JSON döndür, başka hiçbir şey yazma)
+
+{
   "title": "Seçilen en iyi başlık",
-  "title_alternatives": ["2. başlık seçeneği", "3. başlık seçeneği"],
-  "content_html": "<p>Giriş paragrafı...</p><h2>Alt Başlık 1</h2><p>Paragraf...</p><h2>Alt Başlık 2</h2><p>Paragraf...</p><h2>Alt Başlık 3</h2><p>Paragraf...</p><h2>Alt Başlık 4</h2><p>Paragraf...</p><h2>Sonuç</h2><p>Sonuç paragrafı...</p>",
+  "title_alternatives": [
+    "Alternatif başlık 1",
+    "Alternatif başlık 2"
+  ],
+  "content_html": "<p>Giriş paragrafı...</p><h2>Alt Başlık 1</h2><p>Paragraf...</p><h2>Alt Başlık 2</h2><p>Paragraf...</p><h2>Sonuç</h2><p>Sonuç paragrafı...</p>",
   "excerpt": "150-200 karakterlik çekici özet",
-  "meta_description": "SEO meta açıklama (150-160 karakter)",
+  "meta_description": "SEO meta açıklama",
   "focus_keyword": "ana anahtar kelime",
   "keywords": "kelime1, kelime2, kelime3, kelime4, kelime5",
-  "category": "Kategori adı",
+  "category": "Startup",
   "tags": ["etiket1", "etiket2", "etiket3", "etiket4", "etiket5"],
-  "image_search_query": "Pexels için İngilizce arama terimi (2-4 kelime)"
-}}"""
-
+  "image_search_query": "startup funding office"
+}
+"""
     return prompt
 
 
