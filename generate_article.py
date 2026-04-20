@@ -1,3 +1,4 @@
+```python
 """
 generate_article.py
 -------------------
@@ -108,13 +109,14 @@ def generate_article(topic: dict, client: genai.Client, retries: int = 3) -> dic
                 model=GEMINI_MODEL,
                 contents=prompt,
                 config=types.GenerateContentConfig(
-                    temperature=0.85,       # creative but not hallucinating
+                    temperature=0.85,
                     max_output_tokens=8192,
                     response_mime_type="application/json",
                 ),
             )
             raw = response.text.strip()
 
-            # Strip markdown code fences if Gemini wraps in ```json ... ```
+            # Clean JSON formatting
             raw = re.sub(r"^
-http://googleusercontent.com/immersive_entry_chip/0
+
+```
