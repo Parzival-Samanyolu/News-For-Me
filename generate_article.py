@@ -1,120 +1,57 @@
-```python
-"""
-generate_article.py
--------------------
-AI content generation module using Google Gen AI SDK (google-genai).
-"""
-
-from google import genai
-from google.genai import types
-import json
-import re
-import time
-
-GEMINI_MODEL = "gemini-2.5-flash"
-
-def configure_gemini(api_key: str) -> genai.Client:
-    return genai.Client(api_key=api_key)
-
 def build_article_prompt(topic: dict) -> str:
+    """
+    Build a detailed prompt for Gemini to generate a full Turkish article.
+    The prompt enforces viral tone, structure, and SEO requirements.
+    """
     title = topic["title"]
     summary = topic.get("summary", "")
     url = topic.get("url", "")
 
-    prompt = f"""Sen Türkiye'nin en popüler haber sitelerinden birinin baş editörüsün.
-Görevin: Aşağıdaki konuyu viral, clickbait tarzında, Türkçe olarak haberleştirmek.
+    prompt = f"""Sen Türkiye'nin en büyük teknoloji ve ekonomi haber platformunda Baş Editörsün. 
+Yazım dilin profesyonel, otoriter ama aynı zamanda 'viral' etki yaratacak kadar heyecan verici olmalı.
 
 KAYNAK BAŞLIK: {title}
 KAYNAK ÖZET: {summary}
 KAYNAK URL: {url}
 
 ---
-KONTROL NOKTASI (İÇ SİYASET FİLTRESİ):
-Eğer bu haber konusu Türk iç siyaseti, Türk siyasi partileri (AKP, CHP vb.), Türk siyasiler, seçimler veya Türk polisiye olayları ile ilgiliyse, haberi YAZMA ve sadece şu JSON'u döndür:
-{{"error": "turkish_domestic_politics", "title": "", "content_html": ""}}
+⛔ KESİN YASAK — TÜRK İÇ SİYASETİ: 
+Türkiye'deki siyasi partiler, politikacılar (Erdoğan, Özel, vb.) ve yerel seçimlerle ilgili hiçbir şey yazma. 
+Bu kural ihlal edilirse JSON'da error: "turkish_domestic_politics" döndür.
 
-✅ İZİN VERİLENLER: Teknoloji, oyun, spor, startup, uluslararası haberler, küresel ekonomi, bilim ve genel dünyadan gelişmeler tamamen serbesttir. (Startup ve teknoloji odaklı haberlere öncelik ver).
+✅ ÖNCELİKLİ KONULAR: 
+Startup ekosistemi, Global Dev Şirketler (Apple, Tesla, Google, Nvidia vb.), Yapay Zeka, Fintek, Uzay Teknolojileri ve Global Ekonomi.
+
+---
+KRİTİK TALİMATLAR (KALİTE İÇİN):
+1. GENELLEYİCİ OLMA: "Bir şirket", "bazı uzmanlar", "yeni bir teknoloji" gibi yuvarlak ifadeler kullanma. Kaynakta geçen marka, kişi, model ve rakamları ($, %, adet) mutlaka kullan.
+2. SEKTÖREL BAĞLAM: Haberi yazarken konunun sektördeki devlerle (Örn: Apple vs Samsung, Tesla vs BYD) olan rekabetine değin. 
+3. OTORİTER TON: Okuyucuya "bu haberi sadece bizden öğrenebilirsiniz" hissi ver. 
+4. TÜRKİYE ETKİSİ: Bu gelişmenin Türkiye pazarına, Türk kullanıcılarına veya Türk girişimlerine olası etkisini (fiyatlar, erişilebilirlik vb.) mantıklı bir şekilde analiz et.
 
 ---
 YAZIM KURALLARI:
-1. ÖZEL İSİMLERİ VE DETAYLARI KULLAN: Metni jenerikleştirme! Şirket isimlerini, CEO'ları, ürün adlarını ve rakamları cesurca kullan.
-2. BAŞLIK: Merak uyandırıcı, clickbait tarzı 3 seçenek üret, en iyisini seç.
-3. İÇERİK: 4-5 paragraf, H2 alt başlıklar, ilgi çekici ton.
-4. SEO: Meta açıklama, odak anahtar kelime, kategori ve etiketleri ekle.
+1. BAŞLIK: En az 3 versiyon üret. En az biri "rakam" veya "zaman" vurgusu içermeli (Örn: "Sadece 24 Saat Kaldı", "10 Milyar Dolarlık İmzalar Atıldı").
+2. GİRİŞ: Haberin 'neden' şimdi patladığını anlatan, pasif değil aktif cümlelerle dolu bir giriş.
+3. ANA İÇERİK: 
+   - Alt başlıklar (H2) sadece konu başlığı değil, merak uyandıran cümleler olsun.
+   - Her paragrafta en az bir teknik terim veya spesifik veri (donanım özellikleri, borsa değeri, yatırım miktarı vb.) yer almalı.
+4. SONUÇ: Okuyucuyu yorum yapmaya veya haberi paylaşmaya iten bir "Call to Action" ile bitir.
 
 ---
-ÇIKTI FORMATI (Sadece JSON döndür):
+ÇIKTI FORMATI (Kesinlikle bu JSON formatında döndür):
+
 {{
   "title": "Seçilen en iyi başlık",
-  "title_alternatives": ["2. başlık", "3. başlık"],
-  "content_html": "<p>Giriş...</p><h2>Başlık</h2><p>İçerik...</p>",
-  "excerpt": "Özet",
-  "meta_description": "SEO açıklama",
-  "focus_keyword": "anahtar kelime",
-  "keywords": "k1, k2, k3",
+  "title_alternatives": ["2. başlık seçeneği", "3. başlık seçeneği"],
+  "content_html": "<p>Giriş...</p><h2>Alt Başlık</h2><p>Detaylar...</p><h2>Alt Başlık 2</h2><p>Analiz...</p><h2>Sonuç</h2><p>Kapanış...</p>",
+  "excerpt": "150-200 karakterlik ilgi çekici özet",
+  "meta_description": "SEO meta açıklama",
+  "focus_keyword": "ana anahtar kelime",
+  "keywords": "kelime1, kelime2, kelime3, kelime4, kelime5",
   "category": "Kategori",
-  "tags": ["t1", "t2"],
-  "image_search_query": "English search term"
+  "tags": ["etiket1", "etiket2", "etiket3", "etiket4", "etiket5"],
+  "image_search_query": "İngilizce spesifik arama terimi (Örn: 'Tesla Model 2 budget electric car')"
 }}"""
+
     return prompt
-
-def generate_article(topic: dict, client: genai.Client, retries: int = 3) -> dict | None:
-    prompt = build_article_prompt(topic)
-
-    for attempt in range(1, retries + 1):
-        try:
-            print(f"[INFO] Generating article (attempt {attempt})")
-            response = client.models.generate_content(
-                model=GEMINI_MODEL,
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    temperature=0.85,
-                    max_output_tokens=8192,
-                    response_mime_type="application/json",
-                ),
-            )
-            
-            # JSON temizleme (Regex yerine daha güvenli yöntem)
-            raw = response.text.strip()
-            if raw.startswith("```"):
-                raw = raw.split("```")[1]
-                if raw.startswith("json"):
-                    raw = raw[4:]
-            raw = raw.strip()
-
-            article = json.loads(raw)
-
-            if article.get("error") == "turkish_domestic_politics":
-                return None
-
-            article["content_html"] = add_internal_link_hooks(article["content_html"])
-
-            if topic.get("url"):
-                article["content_html"] += f'\n<p class="news-source"><small><em>Kaynak: <a href="{topic["url"]}" target="_blank">orijinal haber</a></em></small></p>'
-
-            return article
-
-        except Exception as e:
-            print(f"[ERROR] Attempt {attempt} failed: {str(e)}")
-            time.sleep(5)
-
-    return None
-
-def add_internal_link_hooks(html: str) -> str:
-    paragraphs = html.split("</p>")
-    if len(paragraphs) > 2:
-        paragraphs[1] += '\n<div class="related-posts-inline">[related_posts_by_tax]</div>'
-    return "</p>".join(paragraphs)
-
-def estimate_word_count(html: str) -> int:
-    return len(re.sub(r"<[^>]+>", " ", html).split())
-
-if __name__ == "__main__":
-    import os
-    api_key = os.environ.get("GEMINI_API_KEY", "")
-    if api_key:
-        client = configure_gemini(api_key)
-        print("Client configured.")
-
-```
-
