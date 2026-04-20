@@ -193,7 +193,7 @@ def add_internal_link_hooks(html: str) -> str:
 
 def estimate_word_count(html: str) -> int:
     """Estimate word count of HTML content (strips tags first)."""
-    text = re.sub(r"<[^>]+>", p" ", html)
+    text = re.sub(r"<[^>]+>", " ", html)
     words = text.split()
     return len(words)
 
@@ -219,4 +219,5 @@ if __name__ == "__main__":
             print(f"Focus KW: {result['focus_keyword']}")
             print(f"Word count: {estimate_word_count(result['content_html'])}")
             print(f"Meta desc: {result['meta_description']}")
+
 
