@@ -13,7 +13,7 @@ import re
 import time
 
 # Model to use — gemini-2.5-flash is fast, free-tier eligible, and great for Turkish
-GEMINI_MODEL = "gemma-12b"
+GEMINI_MODEL = "gemini-2.5-flash-lite"
 
 
 def configure_gemini(api_key: str) -> genai.Client:
