@@ -174,8 +174,7 @@ Yazının tonu:
 Ama ASLA:
 • yanıltıcı clickbait
 • aşırı abartı
-• boş sansasyon
-kullanma.
+• boş sansasyon kullanma.
 
 ---
 HUMANIZED WRITING ZORUNLULUĞU:
