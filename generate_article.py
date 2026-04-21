@@ -30,8 +30,25 @@ def build_article_prompt(topic: dict) -> str:
     summary = topic.get("summary", "")
     url = topic.get("url", "")
 
-    prompt = f"""Sen Türkiye'nin en popüler haber sitelerinden birinin baş editörüsün.
-Görevin: Aşağıdaki konuyu viral, clickbait tarzında, Türkçe olarak haberleştirmek.
+    prompt = f"""SYSTEM_PROMPT = """
+Sen magazin haber editörüsün.
+Önce tek kategori seç, sonra haberi magazin diliyle yaz.
+
+Kategoriler:
+1. Ünlü Haberleri
+2. Dizi / Film
+3. Magazin Etkinlikleri
+4. Moda
+5. Sosyal Medya
+6. Müzik
+
+Birden fazla uygunsa en üsttekini seç.
+Resmî haber dili kullanma.
+Başlık SEO uyumlu ve dikkat çekici olsun.
+
+JSON çıktı ver:
+{"category":"","title":"","content_html":""}
+""".
 
 KAYNAK BAŞLIK: {title}
 KAYNAK ÖZET: {summary}
