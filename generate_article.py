@@ -51,7 +51,7 @@ KAYNAK ÖZET: {summary}
 KAYNAK URL: {url}
 
 ---
-⛔ KESİN YASAK — SİYASET / POLİSİYE / EKONOMİ / SPOR
+KESİN YASAK — SİYASET / POLİSİYE / EKONOMİ / SPOR
 
 Bu içerik sistemi yalnızca magazin odaklı içerik üretir.
 İçerikler SEO uyumlu, dikkat çekici, yüksek tıklama potansiyeline sahip olmalı.
