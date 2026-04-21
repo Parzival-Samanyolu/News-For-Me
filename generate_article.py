@@ -30,7 +30,7 @@ def build_article_prompt(topic: dict) -> str:
     summary = topic.get("summary", "")
     url = topic.get("url", "")
 
-    prompt = f"""SYSTEM_PROMPT = """
+    prompt = f"""
 Sen magazin haber editörüsün.
 Önce tek kategori seç, sonra haberi magazin diliyle yaz.
 
