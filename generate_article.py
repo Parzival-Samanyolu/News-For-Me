@@ -38,45 +38,49 @@ KAYNAK ÖZET: {summary}
 KAYNAK URL: {url}
 
 ---
-⛔ KESİN YASAK — TÜRK İÇ SİYASETİ / POLİSİYE
+⛔ KESİN YASAK — SİYASET / POLİSİYE / EKONOMİ / SPOR
 
-Bu haber sistemi Türk iç siyaseti veya polisiye içerik YAZMAZ.
+Bu içerik sistemi yalnızca magazin odaklı içerik üretir.
+İçerikler SEO uyumlu, dikkat çekici, yüksek tıklama potansiyeline sahip olmalı.
+Yazılar Google Discover uyumlu olmalı ancak yanıltıcı clickbait kullanılmamalı.
 
 Aşağıdaki konuların herhangi biri varsa içerik üretme:
 
-• Türk siyasi partileri (AKP, CHP, MHP, HDP, DEM Parti, İYİ Parti vb.)
-• Türk politikacılar (Erdoğan, Kılıçdaroğlu, Özgür Özel, Bahçeli, İmamoğlu vb.)
-• Eski siyasetçiler, eski milletvekilleri, eski belediye başkanları, eski bakanlar
-• TBMM, seçimler, yerel seçimler, kabine değişiklikleri, muhalefet, koalisyon
-• Belediye başkanlığı haberleri
-• Cinayet, gözaltı, tutuklama, dolandırıcılık, operasyon, mahkeme, soruşturma gibi polisiye haberler
+• Türk iç siyaseti
+• Politikacılar
+• Siyasi partiler
+• Seçimler
+• Belediye / devlet yönetimi haberleri
+• Cinayet, gözaltı, tutuklama, mahkeme, operasyon gibi polisiye olaylar
+• Borsa, ekonomi, finans analizleri
+• Spor karşılaşmaları ve spor kulübü haberleri
 
 Eğer kaynak bu konularla ilgiliyse şu JSON'u döndür ve DUR:
 
 {{
-  "error": "turkish_domestic_politics",
+  "error": "non_magazine_content",
   "title": "",
   "content_html": ""
 }}
 
 ✅ İZİN VERİLENLER:
-• Startup haberleri
-• Teknoloji haberleri
-• Yapay zeka haberleri
-• Oyun haberleri
-• Borsa / finans haberleri
-• Uluslararası haberler
-• Türkiye ekonomisi
-• Turizm
-• Türkiye dış politikası
+• Ünlü haberleri
+• Sanatçı projeleri
+• Oyuncu röportajları
+• Dizi / film dünyası
+• Magazin etkinlikleri
+• Moda ve kırmızı halı
+• Sosyal medya gündemi
+• Ünlü ilişkileri
+• Müzik dünyası gelişmeleri
 
 ÖNCELİK SIRASI:
-1. Startup
-2. Teknoloji
-3. Yapay Zeka
-4. Oyun
-5. Borsa / Finans
-6. Uluslararası
+1. Ünlü Haberleri
+2. Dizi / Film Dünyası
+3. Magazin Etkinlikleri
+4. Moda
+5. Sosyal Medya Gündemi
+6. Müzik Dünyası
 
 Üst sıradaki kategori varsa alt kategoriye geçme.
 
@@ -86,25 +90,55 @@ YAZIM KURALLARI:
 1. BAŞLIK (3 seçenek üret, en iyisini seç):
    - 8-12 kelime arası olmalı
    - SEO uyumlu olmalı
-   - Güçlü, doğal ve merak uyandırıcı olmalı
    - Ana anahtar kelime başa yakın kullanılmalı
+   - Güçlü merak duygusu yaratmalı
+   - Doğal ve profesyonel görünmeli
+   - Google Discover için tıklama potansiyeli yüksek olmalı
+   - Abartılı ünlem, tamamen yanıltıcı ifade kullanma
+
+Başlık örnek tonu:
+✅ "X’in son paylaşımı sosyal medyada gündem oldu"
+✅ "Y’nin yeni projesi hayranlarını heyecanlandırdı"
+✅ "Ünlü oyuncunun kırmızı halı tercihi çok konuşuldu"
 
 2. GİRİŞ PARAGRAFI (2-3 cümle):
-   - Okuyucuyu hemen içine çeken doğal bir giriş yap
-   - Haberin neden önemli olduğunu açıkla
-   - Yüzeysel giriş yapma
+   - İlk cümle dikkat çekici olmalı
+   - Okuyucuda merak duygusu oluşturmalı
+   - Haberin neden önemli olduğu net anlatılmalı
+   - Magazin etkisi güçlü verilmeli
 
 3. ANA İÇERİK (4-5 paragraf, her biri 80-120 kelime):
    - Her paragrafa H2 alt başlık koy
-   - Konuyu derinlemesine açıkla
-   - Somut bilgiler ver
-   - Şirket, kişi, ürün ve rakam detaylarını ekle
-   - Sektörel etkisini anlat
-   - Genel geçer cümleler kullanma
+   - İlk paragrafta olayın özünü ver
+   - Sonraki paragraflarda detaylandır
+   - Somut isimler, projeler, tarih ve yer bilgileri ekle
+   - Kamuoyu etkisini anlat
+   - Sosyal medya veya medya yansımasını belirt
+   - Gereksiz tekrar yapma
+   - Genel ifadeler kullanma
 
 4. SONUÇ:
-   - Gelişmenin gelecekteki etkisini özetle
-   - Güçlü ama doğal bir kapanış yap
+   - Gelişmenin etkisini özetle
+   - Gelecekte ne olabileceğini belirt
+   - Okuyucuda merak bırakacak doğal kapanış yap
+
+---
+SEO KURALLARI:
+
+• Ana anahtar kelime başlıkta geçmeli
+• Ana anahtar kelime giriş paragrafında doğal şekilde geçmeli
+• Alt başlıklarda ilgili anahtar kelimeler kullanılmalı
+• Cümleler doğal olmalı, anahtar kelime doldurma yapma
+• Google Discover için duygusal tetikleyici kullan:
+  - şaşırttı
+  - gündem oldu
+  - dikkat çekti
+  - olay yarattı
+  - çok konuşuldu
+  - hayranlarını heyecanlandırdı
+
+Ama:
+❌ “ŞOK!”, “İnanamayacaksınız!”, “Yok artık!” gibi düşük kalite clickbait yasak.
 
 ---
 DETAY ZORUNLULUĞU:
@@ -112,23 +146,36 @@ DETAY ZORUNLULUĞU:
 Yüzeysel yazmak YASAK.
 
 Kötü örnek:
-"Bir startup yatırım aldı."
+"Ünlü oyuncu yeni projeye başladı."
 
 İyi örnek:
-"Berlin merkezli yapay zeka girişimi X, Y Ventures liderliğinde 15 milyon dolar yatırım alarak Avrupa pazarındaki büyümesini hızlandıracağını açıkladı."
+"Başarılı oyuncu X, dijital platform Y için hazırlanan yeni dizinin başrolü için anlaşma sağladı. Çekimlerin Temmuz ayında İstanbul'da başlaması planlanırken, yapımın sezonun en çok konuşulacak projeleri arasında gösteriliyor."
 
 Mutlaka ekle:
 • kişi adları
-• şirket adları
+• proje adları
 • marka adları
-• ürün adları
-• yatırım miktarı
-• yatırımcı adı
-• ülke / şehir bilgisi
-• sektör etkisi
+• etkinlik adı
+• tarih bilgisi
+• şehir / ülke bilgisi
+• medya etkisi
+• sosyal medya etkisi
 
-Şirket adı vermeden haber yazma.
+Kişi adı vermeden yazı yazma.
 Genel ifadeler kullanma.
+
+Yazının tonu:
+• akıcı
+• güçlü
+• merak uyandırıcı
+• SEO uyumlu
+• profesyonel magazin editörü dili
+
+Ama ASLA:
+• yanıltıcı clickbait
+• aşırı abartı
+• boş sansasyon
+kullanma.
 
 ---
 HUMANIZED WRITING ZORUNLULUĞU:
