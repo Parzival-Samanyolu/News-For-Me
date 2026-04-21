@@ -16,21 +16,35 @@ from difflib import SequenceMatcher
 
 
 # ─────────────────────────────────────────────
-# RSS FEED SOURCES (no API key required)
+# MAGAZINE RSS FEED SOURCES
 # ─────────────────────────────────────────────
 RSS_SOURCES = [
-    # Google News – Turkish trending
-    "https://news.google.com/rss?hl=tr&gl=TR&ceid=TR:tr",
-    # Google News – World in Turkish
-    "https://news.google.com/rss/headlines/section/geo/TR?hl=tr&gl=TR&ceid=TR:tr",
-    # Google News – Technology
-    "https://news.google.com/rss/headlines/section/topic/TECHNOLOGY?hl=tr&gl=TR&ceid=TR:tr",
-    # Google News – Business
-    "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=tr&gl=TR&ceid=TR:tr",
-    # Reddit World News
-    "https://www.reddit.com/r/worldnews/.rss",
-    # Reddit Turkey
-    "https://www.reddit.com/r/Turkey/.rss",
+    # Google News - Entertainment (Turkish)
+    "https://news.google.com/rss/headlines/section/topic/ENTERTAINMENT?hl=tr&gl=TR&ceid=TR:tr",
+
+    # Google News - Entertainment (Global English)
+    "https://news.google.com/rss/headlines/section/topic/ENTERTAINMENT?hl=en-US&gl=US&ceid=US:en",
+
+    # Google News - Celebrities
+    "https://news.google.com/rss/search?q=celebrity+news&hl=en-US&gl=US&ceid=US:en",
+
+    # Google News - Turkish celebrity news
+    "https://news.google.com/rss/search?q=magazin+haberleri&hl=tr&gl=TR&ceid=TR:tr",
+
+    # Reddit Pop Culture
+    "https://www.reddit.com/r/popculture/.rss",
+
+    # Reddit Entertainment
+    "https://www.reddit.com/r/entertainment/.rss",
+
+    # Reddit Movies
+    "https://www.reddit.com/r/movies/.rss",
+
+    # Reddit Television
+    "https://www.reddit.com/r/television/.rss",
+
+    # Reddit Music
+    "https://www.reddit.com/r/music/.rss",
 ]
 
 # Turkish news keywords that boost virality score
