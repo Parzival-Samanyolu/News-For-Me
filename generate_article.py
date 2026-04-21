@@ -46,10 +46,6 @@ Birden fazla uygunsa en üsttekini seç.
 Resmî haber dili kullanma.
 Başlık SEO uyumlu ve dikkat çekici olsun.
 
-JSON çıktı ver:
-{"category":"","title":"","content_html":""}
-""".
-
 KAYNAK BAŞLIK: {title}
 KAYNAK ÖZET: {summary}
 KAYNAK URL: {url}
