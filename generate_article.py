@@ -292,6 +292,10 @@ def generate_article(topic: dict, client: genai.Client, retries: int = 3) -> dic
                     time.sleep(5)
                     continue
 
+            # Strip everything after ":" in the title
+            if ":" in article["title"]:
+                article["title"] = article["title"].split(":")[0].strip() + ":"
+
             # Add internal linking placeholder comments
             article["content_html"] = add_internal_link_hooks(article["content_html"])
 
