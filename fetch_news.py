@@ -8,9 +8,9 @@ Scores, deduplicates, and returns the top N topics for the day.
 
 import feedparser
 import requests
-import hashlib
 import json
 import os
+import re
 from datetime import datetime, timezone
 from difflib import SequenceMatcher
 
@@ -125,7 +125,6 @@ def fetch_rss_feed(url: str) -> list[dict]:
             summary = entry.get("summary", entry.get("description", "")).strip()
             published = entry.get("published", "")
             # Clean HTML tags from summary
-            import re
             summary = re.sub(r"<[^>]+>", "", summary)
 
             if title and link:
@@ -203,28 +202,105 @@ def score_article(article: dict) -> int:
     return score
 
 
-def deduplicate(articles: list[dict], title_threshold: float = 0.65, summary_threshold: float = 0.50) -> list[dict]:
+# ─────────────────────────────────────────────
+# SIMILARITY UTILITIES
+# Multi-signal matcher: catches articles that cover the same story
+# even when headlines are reworded, reordered, or from different sources.
+# ─────────────────────────────────────────────
+
+# Common stopwords in Turkish + English to exclude from token-overlap scoring.
+# Significant-token matching focuses on proper nouns / content words.
+_STOPWORDS = {
+    # Turkish
+    "ve", "ile", "bu", "bir", "da", "de", "ki", "mi", "ne", "en", "çok", "daha",
+    "ama", "fakat", "için", "gibi", "sonra", "önce", "kadar", "şu", "o", "ben",
+    "sen", "biz", "siz", "onlar", "var", "yok", "oldu", "olan", "olarak", "ise",
+    "ya", "yani", "her", "hiç", "tüm", "bazı", "kendi", "yeni", "son", "ilk",
+    # English
+    "the", "a", "an", "and", "or", "but", "of", "to", "in", "on", "at", "by",
+    "for", "with", "from", "as", "is", "are", "was", "were", "be", "been",
+    "being", "have", "has", "had", "do", "does", "did", "will", "would",
+    "could", "should", "may", "might", "this", "that", "these", "those",
+    "it", "its", "he", "she", "they", "them", "their", "his", "her", "who",
+    "what", "when", "where", "why", "how", "new", "says", "said",
+}
+
+
+def normalize_text(text: str) -> str:
+    """Lowercase and strip punctuation for similarity comparison."""
+    text = text.lower()
+    text = re.sub(r"[^\w\sğüşıöçĞÜŞİÖÇ]", " ", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
+
+
+def significant_tokens(text: str, min_len: int = 4) -> set:
     """
-    Remove near-duplicate articles by title AND summary similarity.
+    Extract 'significant' tokens — proper nouns, names, content words.
+    Drops stopwords and very short tokens. Used for Jaccard overlap.
+    """
+    normalized = normalize_text(text)
+    tokens = {t for t in normalized.split() if len(t) >= min_len and t not in _STOPWORDS}
+    return tokens
+
+
+def jaccard_similarity(a: set, b: set) -> float:
+    """Jaccard similarity between two token sets. 0 if either is empty."""
+    if not a or not b:
+        return 0.0
+    return len(a & b) / len(a | b)
+
+
+def articles_are_similar(
+    a: dict,
+    b: dict,
+    title_threshold: float = 0.65,
+    summary_threshold: float = 0.50,
+    token_threshold: float = 0.45,
+) -> bool:
+    """
+    Multi-signal duplicate check. Returns True if articles cover the same story.
+
+    Signals (any one crossing its threshold flags as duplicate):
+      1. Title sequence similarity   — catches reworded headlines
+      2. Summary sequence similarity — catches different headlines, same body
+      3. Significant-token Jaccard   — catches reordered or paraphrased headlines
+         about the same subject (proper nouns, names, events)
+    """
+    a_title = normalize_text(a.get("title", ""))
+    b_title = normalize_text(b.get("title", ""))
+    a_summary = normalize_text(a.get("summary", ""))
+    b_summary = normalize_text(b.get("summary", ""))
+
+    title_ratio = SequenceMatcher(None, a_title, b_title).ratio()
+    if title_ratio >= title_threshold:
+        return True
+
+    summary_ratio = SequenceMatcher(None, a_summary, b_summary).ratio()
+    if summary_ratio >= summary_threshold:
+        return True
+
+    # Token overlap on title+summary catches paraphrased stories about the
+    # same named entities even when sequence similarity is low.
+    a_tokens = significant_tokens(a.get("title", "") + " " + a.get("summary", ""))
+    b_tokens = significant_tokens(b.get("title", "") + " " + b.get("summary", ""))
+    if jaccard_similarity(a_tokens, b_tokens) >= token_threshold:
+        return True
+
+    return False
+
+
+def deduplicate(articles: list[dict]) -> list[dict]:
+    """
+    Remove near-duplicate articles using multi-signal similarity.
     Keeps the highest-scored article when duplicates are found.
     """
     unique = []
     for article in articles:
         is_duplicate = False
         for kept in unique:
-            title_ratio = SequenceMatcher(
-                None,
-                article["title"].lower(),
-                kept["title"].lower()
-            ).ratio()
-            summary_ratio = SequenceMatcher(
-                None,
-                article.get("summary", "").lower(),
-                kept.get("summary", "").lower()
-            ).ratio()
-            if title_ratio >= title_threshold or summary_ratio >= summary_threshold:
+            if articles_are_similar(article, kept):
                 is_duplicate = True
-                # Keep higher-scored one
                 if article["score"] > kept["score"]:
                     unique.remove(kept)
                     unique.append(article)
@@ -234,28 +310,32 @@ def deduplicate(articles: list[dict], title_threshold: float = 0.65, summary_thr
     return unique
 
 
-def get_content_hash(title: str) -> str:
-    """Generate a short hash to track published titles and avoid repeats."""
-    return hashlib.md5(title.lower().encode()).hexdigest()[:12]
-
-
-def load_published_hashes(filepath: str = "published_hashes.json") -> set:
-    """Load previously published article hashes to avoid republishing."""
+def load_published_articles(filepath: str = "published_articles.json") -> list[dict]:
+    """
+    Load previously published articles (title + summary) for fuzzy dedup.
+    Falls back to the legacy hash-only file for first-run compatibility.
+    """
     if os.path.exists(filepath):
         with open(filepath, "r") as f:
             data = json.load(f)
-            return set(data.get("hashes", []))
-    return set()
+            return data.get("articles", [])
+    return []
 
 
-def save_published_hashes(hashes: set, filepath: str = "published_hashes.json"):
-    """Persist published hashes so duplicates are avoided across runs."""
-    existing = load_published_hashes(filepath)
-    all_hashes = list(existing | hashes)
+def save_published_articles(new_articles: list[dict], filepath: str = "published_articles.json"):
+    """
+    Persist published articles so duplicates are caught across runs.
+    Stores title + summary (not just a hash) to enable fuzzy matching.
+    """
+    existing = load_published_articles(filepath)
+    combined = existing + new_articles
     # Keep only last 500 to prevent file bloat
-    all_hashes = all_hashes[-500:]
+    combined = combined[-500:]
     with open(filepath, "w") as f:
-        json.dump({"hashes": all_hashes, "updated": datetime.now(timezone.utc).isoformat()}, f, indent=2)
+        json.dump(
+            {"articles": combined, "updated": datetime.now(timezone.utc).isoformat()},
+            f, indent=2, ensure_ascii=False
+        )
 
 
 def fetch_top_topics(count: int = 3, gnews_api_key: str = "") -> list[dict]:
@@ -297,13 +377,14 @@ def fetch_top_topics(count: int = 3, gnews_api_key: str = "") -> list[dict]:
     unique_articles = deduplicate(all_articles)
     print(f"[INFO] {len(unique_articles)} unique articles after deduplication")
 
-    # Filter already-published
-    published_hashes = load_published_hashes()
-    fresh_articles = [
-        a for a in unique_articles
-        if get_content_hash(a["title"]) not in published_hashes
-    ]
-    print(f"[INFO] {len(fresh_articles)} fresh articles (not yet published)")
+    # Filter already-published using fuzzy multi-signal matching
+    past_articles = load_published_articles()
+    fresh_articles = []
+    for a in unique_articles:
+        if any(articles_are_similar(a, past) for past in past_articles):
+            continue
+        fresh_articles.append(a)
+    print(f"[INFO] {len(fresh_articles)} fresh articles (not similar to any of {len(past_articles)} past published)")
 
     # Return top N
     top = fresh_articles[:count]

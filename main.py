@@ -23,7 +23,7 @@ import json
 import time
 from datetime import datetime, timezone
 
-from fetch_news import fetch_top_topics, get_content_hash, save_published_hashes
+from fetch_news import fetch_top_topics, save_published_articles
 from generate_article import configure_gemini, generate_article
 from fetch_image import get_featured_image_id
 from publish_to_wp import WordPressPublisher
@@ -115,7 +115,7 @@ def run():
 
     # 5. Generate and publish articles
     results = []
-    published_hashes = set()
+    newly_published = []
     articles_published = 0
 
     for topic in topics:
@@ -158,7 +158,11 @@ def run():
             result["success"] = True
             result["post_url"] = pub_result["post_url"]
             result["post_id"] = pub_result["post_id"]
-            published_hashes.add(get_content_hash(topic["title"]))
+            newly_published.append({
+                "title": topic["title"],
+                "summary": topic.get("summary", ""),
+                "generated_title": article["title"],
+            })
             articles_published += 1
             print(f"[✓] Published: {article['title'][:65]}")
         else:
@@ -172,9 +176,9 @@ def run():
             print("[INFO] Waiting 15s before next article...")
             time.sleep(15)
 
-    # 6. Save published hashes to avoid republishing
-    if published_hashes:
-        save_published_hashes(published_hashes)
+    # 6. Save published articles (title + summary) to avoid republishing
+    if newly_published:
+        save_published_articles(newly_published)
 
     # 7. Log summary
     log_run_summary(results)
