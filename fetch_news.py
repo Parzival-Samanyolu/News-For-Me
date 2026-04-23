@@ -203,21 +203,26 @@ def score_article(article: dict) -> int:
     return score
 
 
-def deduplicate(articles: list[dict], threshold: float = 0.65) -> list[dict]:
+def deduplicate(articles: list[dict], title_threshold: float = 0.65, summary_threshold: float = 0.50) -> list[dict]:
     """
-    Remove near-duplicate articles by title similarity.
+    Remove near-duplicate articles by title AND summary similarity.
     Keeps the highest-scored article when duplicates are found.
     """
     unique = []
     for article in articles:
         is_duplicate = False
         for kept in unique:
-            ratio = SequenceMatcher(
+            title_ratio = SequenceMatcher(
                 None,
                 article["title"].lower(),
                 kept["title"].lower()
             ).ratio()
-            if ratio >= threshold:
+            summary_ratio = SequenceMatcher(
+                None,
+                article.get("summary", "").lower(),
+                kept.get("summary", "").lower()
+            ).ratio()
+            if title_ratio >= title_threshold or summary_ratio >= summary_threshold:
                 is_duplicate = True
                 # Keep higher-scored one
                 if article["score"] > kept["score"]:
