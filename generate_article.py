@@ -12,7 +12,7 @@ import json
 import re
 import time
 
-# Model to use — gemini-2.5-flash is fast, free-tier eligible, and great for Turkish
+# Model to use — gemini-2.5-flash-lite is fast, free-tier eligible, and great for Turkish
 GEMINI_MODEL = "gemini-2.5-flash-lite"
 
 
@@ -110,8 +110,8 @@ YAZIM KURALLARI:
    - Abartılı ünlem, tamamen yanıltıcı ifade kullanma
 
 Başlık örnek tonu:
-✅ "X’in son paylaşımı sosyal medyada gündem oldu"
-✅ "Y’nin yeni projesi hayranlarını heyecanlandırdı"
+✅ "X'in son paylaşımı sosyal medyada gündem oldu"
+✅ "Y'nin yeni projesi hayranlarını heyecanlandırdı"
 ✅ "Ünlü oyuncunun kırmızı halı tercihi çok konuşuldu"
 
 2. GİRİŞ PARAGRAFI (2-3 cümle):
@@ -151,7 +151,7 @@ SEO KURALLARI:
   - hayranlarını heyecanlandırdı
 
 Ama:
-❌ “ŞOK!”, “İnanamayacaksınız!”, “Yok artık!” gibi düşük kalite clickbait yasak.
+❌ "ŞOK!", "İnanamayacaksınız!", "Yok artık!" gibi düşük kalite clickbait yasak.
 
 ---
 DETAY ZORUNLULUĞU:
@@ -219,7 +219,7 @@ SEO META VERİLERİ:
 • Meta açıklama: 150-160 karakter
 • Anahtar kelimeler: 5-8 adet
 • Odak anahtar kelime: 1 adet
-• Kategori: Startup / Teknoloji / Finans / Dünya / Oyun
+• Kategori: Ünlü Haberleri / Dizi-Film / Magazin Etkinlikleri / Moda / Sosyal Medya / Müzik
 • Etiketler: 5-7 adet
 • image_search_query: İngilizce 2-4 kelime
 
@@ -241,9 +241,9 @@ Anahtar kelime spam yapma.
   "meta_description": "SEO meta açıklama",
   "focus_keyword": "ana anahtar kelime",
   "keywords": "kelime1, kelime2, kelime3, kelime4, kelime5",
-  "category": "Startup",
+  "category": "Ünlü Haberleri",
   "tags": ["etiket1", "etiket2", "etiket3", "etiket4", "etiket5"],
-  "image_search_query": "startup funding office"
+  "image_search_query": "celebrity red carpet event"
 }}
 
 """
@@ -264,7 +264,7 @@ def generate_article(topic: dict, client: genai.Client, retries: int = 3) -> dic
                 model=GEMINI_MODEL,
                 contents=prompt,
                 config=types.GenerateContentConfig(
-                    temperature=0.85,       # creative but not hallucinating
+                    temperature=0.85,
                     max_output_tokens=8192,
                     response_mime_type="application/json",
                 ),
@@ -277,9 +277,9 @@ def generate_article(topic: dict, client: genai.Client, retries: int = 3) -> dic
 
             article = json.loads(raw)
 
-            # Hard stop: Gemini itself flagged this as Turkish domestic politics
-            if article.get("error") == "turkish_domestic_politics":
-                print(f"[SKIP] Gemini refused topic (Turkish domestic politics): {topic['title'][:60]}")
+            # BUG FIX: catch both error codes — old politics filter + new magazine filter
+            if article.get("error") in ("turkish_domestic_politics", "non_magazine_content"):
+                print(f"[SKIP] Gemini refused topic (non-magazine content): {topic['title'][:60]}")
                 return None
 
             # Validate required fields
@@ -326,7 +326,6 @@ def add_internal_link_hooks(html: str) -> str:
     Add WordPress internal link shortcode hooks after every 2nd paragraph.
     These will be processed by a WordPress plugin to inject related posts.
     """
-    # Insert a related posts shortcode after the 2nd <p> tag
     paragraphs_seen = 0
     result = []
     for line in html.split("\n"):
@@ -357,9 +356,9 @@ if __name__ == "__main__":
     else:
         client = configure_gemini(api_key)
         test_topic = {
-            "title": "Tesla reveals new affordable electric car for global markets",
-            "summary": "Tesla has announced a new budget-friendly electric vehicle targeting emerging markets with a price point under $25,000.",
-            "url": "https://example.com/tesla-new-car"
+            "title": "Taylor Swift announces new world tour dates",
+            "summary": "Taylor Swift has revealed new dates for her Eras Tour, adding stops in Europe and Asia.",
+            "url": "https://example.com/taylor-swift-tour"
         }
         result = generate_article(test_topic, client)
         if result:
@@ -370,5 +369,3 @@ if __name__ == "__main__":
             print(f"Focus KW: {result['focus_keyword']}")
             print(f"Word count: {estimate_word_count(result['content_html'])}")
             print(f"Meta desc: {result['meta_description']}")
-
-
